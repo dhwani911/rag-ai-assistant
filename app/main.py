@@ -20,6 +20,6 @@ def ask(request: QuestionRequest):
 	"""
 	API endpoint for asking questions.
 	"""
-	answer = ask_questions(request.question)
-	return {"question": request.question, "answer": answer}
+	answer = ask_questions(request.text)
+	return {"question": request.text, "answer": answer}
 

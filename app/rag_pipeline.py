@@ -9,13 +9,15 @@ from app.llm import load_llm
 
 def ask_questions(question):
 	""" Ask question to RAG pipeline """
-	
+
 	# Load Vector database
 	vector_db = get_vector_store()
 
 	# Retrive most 3 similar chunks
 	docs = vector_db.similarity_search(question, k=3)
-
+	print("Retrieved Docs:")
+	print(docs)
+	
 	# Combine retrieved chunks into a single context string
 	context = "\n\n".join([doc.page_content for doc in docs])
 	

@@ -11,5 +11,5 @@ embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
 def get_vector_store():
 	# Returns ChromaDB vector store instance
-	vector_db = Chroma(embedding_function=embeddings, persist_directory=CHROMA_DB_PATH)
+	vector_db = Chroma(collection_name="rag_collection",embedding_function=embeddings, persist_directory=CHROMA_DB_PATH)
 	return vector_db
