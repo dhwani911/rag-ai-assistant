@@ -5,5 +5,5 @@ from app.config import MODEL_NAME
 
 def load_llm():  
 	""" Load local Ollama model """
-	llm = Ollama(model=MODEL_NAME)
+	llm = Ollama(model=MODEL_NAME, base_url="http://host.docker.internal:11434")
 	return llm
