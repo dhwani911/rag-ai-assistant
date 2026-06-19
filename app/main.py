@@ -28,6 +28,7 @@ def ask(request: QuestionRequest):
 	"""
 	API endpoint for asking questions.
 	"""
-	answer = ask_questions(request.text)
-	final_answer = answer.replace("\\n", " ").replace("\n", " ").strip()
-	return {"question": request.text, "answer": final_answer}
+	result = ask_questions(request.text)
+	final_answer = result["answer"].replace("\\n", " ").replace("\n", " ").strip()
+	return {"question": request.text, "answer": final_answer, "sources": result["sources"]}
+

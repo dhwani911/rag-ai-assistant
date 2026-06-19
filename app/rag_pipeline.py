@@ -2,7 +2,6 @@
 # 1. Search relevant chunks
 # 2. Send chunks to LLM
 # 3. Generate final answer
-from click import prompt
 
 from app.vector_store import get_vector_store
 from app.llm import load_llm
@@ -15,9 +14,8 @@ def ask_questions(question):
 
 	# Retrive most 3 similar chunks
 	docs = vector_db.similarity_search(question, k=3)
-	print("Retrieved Docs:")
-	print(docs)
-	
+	print("\nRetrieved Docs:")
+
 	# Combine retrieved chunks into a single context string
 	context = "\n\n".join([doc.page_content for doc in docs])
 	
@@ -29,7 +27,26 @@ def ask_questions(question):
 	
 	# generate response
 	response = llm.invoke(prompt)
+
+	# Extract sources
+	sources = extract_sources(docs)
+
+	return {
+		"answer": response,
+		"sources": sources
+	}
+
+def extract_sources(docs):
+	""" Extract sources from retrieved documents from it's metadata """
+	sources = []
 	
-	return response
+	for doc in docs:
+		source_info = {
+			"source": doc.metadata.get("source", "Unknown"),
+			"page": doc.metadata.get("page", "Unknown")
+		}
+		sources.append(source_info)
+	return sources
+	
 	
 	
