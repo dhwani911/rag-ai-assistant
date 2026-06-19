@@ -15,6 +15,10 @@ def ingest_pdf(file_path):
 	loader = PyPDFLoader(file_path)
 	documents = loader.load()
 	print(f"Loaded {len(documents)} pages")
+
+	for doc in documents[:2]:
+		print(doc.metadata)
+	print("+"*40)
 	
 	# Split documents into small chunks
 	splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
@@ -31,4 +35,7 @@ def ingest_pdf(file_path):
 	# vector_db.persist()   			        # Save database
 	
 	print("Documents successfully ingested")
+	return {
+		"message": f"Ingested {len(chunks)} chunks"
+	}
 	
