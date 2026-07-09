@@ -2,6 +2,7 @@
 # 1. Search relevant chunks
 # 2. Send chunks to LLM
 # 3. Generate final answer
+import os
 
 from app.vector_store import get_vector_store
 from app.llm import load_llm
@@ -38,12 +39,24 @@ def ask_questions(question):
 
 def extract_sources(docs):
 	""" Extract sources from retrieved documents from it's metadata """
+	seen = set()
 	sources = []
 	
 	for doc in docs:
+		meta = doc.metadata
+		file_path = meta.get("source", "Unknown")
+		file_path = os.path.basename(file_path)
+		page = meta.get("page", 0)
+		
+		# We donot want repeatation of sources and page number in response
+		key = (file_path, page)
+		if key in seen:
+			continue
+		seen.add(key)
+					
 		source_info = {
-			"source": doc.metadata.get("source", "Unknown"),
-			"page": doc.metadata.get("page", "Unknown")
+			"source": file_path,
+			"page": page + 1
 		}
 		sources.append(source_info)
 	return sources
